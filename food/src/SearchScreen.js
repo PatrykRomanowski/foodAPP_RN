@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import SearchBar from "./components/SearchBar";
+import yelp from "./api/yelp";
 
 const SearchScreen = () => {
   const [term, setTerm] = useState("");
+  const [resoults, setResoults] = useState([]);
+  const [errorMessage, seterrorMessage] = useState("");
+
+  const searchApi = async (searchTerm) => {
+    try {
+      const response = await yelp.get("/search", {
+        params: {
+          limit: 50,
+          term: searchTerm,
+          location: "san jose",
+        },
+      });
+      setResoults(response.data.businesses);
+    } catch (error) {
+      seterrorMessage("Something went wrong");
+    }
+  };
+
   return (
     <View>
       <SearchBar
@@ -11,9 +30,10 @@ const SearchScreen = () => {
         onTermChange={(newTerm) => {
           setTerm(newTerm);
         }}
-        onTermSubmit={() => console.log("term was submoted")}
+        onTermSubmit={() => searchApi(term)}
       />
-      <Text>{term}</Text>
+      <Text>{errorMessage}</Text>
+      <Text>{resoults.length}</Text>
     </View>
   );
 };
