@@ -5,7 +5,7 @@ import yelp from "./api/yelp";
 import useResoults from "./api/hooks/useResoults";
 import ResoultsList from "./components/ResoultsList";
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
   const [term, setTerm] = useState("");
   const [searchApi, resoults, errorMessage] = useResoults();
 
@@ -16,7 +16,7 @@ const SearchScreen = () => {
   };
 
   return (
-    <View style={{ marginLeft: 10 }}>
+    <View style={{ flex: 1, marginLeft: 10 }}>
       <SearchBar
         term={term}
         onTermChange={(newTerm) => {
@@ -24,8 +24,8 @@ const SearchScreen = () => {
         }}
         onTermSubmit={() => searchApi(term)}
       />
-      <Text>{errorMessage}</Text>
-      <Text>{resoults.length}</Text>
+      {/* <Text>{errorMessage}</Text>
+      <Text>{resoults.length}</Text> */}
       <ScrollView>
         <ResoultsList
           results={filterResoultByPrice("$")}
